@@ -1,5 +1,6 @@
 '''
 This code generates a maze using a random walk algorithm.
+In the latest version, the maze is generated using a recursive backtracking algorithm.
 The maze is represented as a 2D grid, where walls are removed to create paths. 
 '''
 
@@ -143,7 +144,7 @@ def generate_maze(array: List[List[int]], visited: List[Tuple[int, int]], curren
             array[new_row][new_col] = 3  # Mark as visited path (3)
             # Mark the cell between the current and new position as "3" (path)
             array[current[0] + current_direction[0] // 2][current[1] + current_direction[1] // 2] = 3
-            visited.add((new_row, new_col))  # Add to visited set
+            visited.append((new_row, new_col))  # Add to visited set
             current = (new_row, new_col)  # Update current position
             # Draw the array with the visited cell
             draw_maze(array)
@@ -154,7 +155,11 @@ def generate_maze(array: List[List[int]], visited: List[Tuple[int, int]], curren
             if len(valid_directions) == 0:
                 # If no valid directions left, randomly choose a visited cell
                 # and mark it as the current position
-                current = random.choice(list(visited))
+                # current = random.choice(list(visited))
+                # instead of randomly choosing a visited cell, we can take the previous visited cell as the current position
+                # to avoid the maze being too long and hard to find the ending point
+                if len(visited) > 0:
+                    current = visited.pop()  # Pop a visited cell to backtrack
 
     return array, visited, current
 
@@ -165,7 +170,7 @@ array = initialize_maze_array(maze_row_size, maze_col_size)
 num_ones = sum(row.count(1) for row in array)
 
 # Set to keep track of visited cells in order to avoid duplicates
-visited = set()
+visited = []
 
 # Mark the starting point in the array
 current = (1, 1)  # Current position in the maze
@@ -184,7 +189,7 @@ while running:
         start = choose_point(array)
         array[start[0]][start[1]] = 2  # 2 represents the starting point
 
-        visited.add(start)  # Mark the starting point as visited
+        visited.append(start)  # Mark the starting point as visited
 
         # Start from the starting point and randomly choose a direction
         current = start  # Start from the starting point
