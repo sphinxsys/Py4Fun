@@ -1,3 +1,7 @@
+'''
+A small maze generator using a random walk algorithm.
+(Testing purposes only)
+'''
 import random
 
 # This code generates a maze using a random walk algorithm.
